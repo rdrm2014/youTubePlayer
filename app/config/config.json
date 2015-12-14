@@ -1,0 +1,10 @@
+{
+  "name": "youTubePlayer",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "serverWeb": {
+    "ipaddr": "127.0.0.1",
+    "port": 8080
+  }
+}

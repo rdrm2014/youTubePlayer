@@ -2,6 +2,7 @@
   "name": "youTubePlayer",
   "version": "1.0.0",
   "description": "A minimal Electron application",
+  "tecnology": "Node.js",
   "main": "main.js",
   "scripts": {
     "build-osx": "electron-packager . $npm_package_productName --overwrite --prune --platform=darwin --arch=x64 --version=$npm_package_electronVersion --icon=app/images/Icon.icns",
@@ -14,7 +15,9 @@
   ],
   "author": "Ricardo Mendes",
   "dependencies": {
-    "express": "^4.13.1"
+    "express": "^4.13.1",
+    "nconf": "^0.8.2",
+    "winston": "^2.1.1"
   },
   "devDependencies": {
     "electron-prebuilt": "^0.35.0",

@@ -1,6 +1,13 @@
 /**
  * Created by ricardomendes on 11/12/15.
  */
+var src = process.cwd() + '/app/';
+var config = require(src + 'config/config');
+
+var log = require(src + 'log/log')(module);
+var port = config.get('serverWebSocket:port') || 3000;
+var host = config.get('serverWebSocket:ipaddr') || '127.0.0.1';
+
 const electron = require('electron');
 const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
@@ -8,6 +15,17 @@ const BrowserWindow = electron.BrowserWindow;  // Module to create native browse
 // Report crashes to our server.
 electron.crashReporter.start();
 
+var path = require('path');
+var events = require('events');
+var fs = require('fs');
+var clipboard = require('clipboard');
+
+var express = require('express');
+var webapp = express();
+var http = require('http').Server(webapp);
+
+// Report crashes to our server.
+require('crash-reporter').start();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -25,20 +43,40 @@ app.on('window-all-closed', function () {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', function () {
-    // Create the browser window.
-    mainWindow = new BrowserWindow({width: 800, height: 600});
 
-    // and load the index.html of the app.
-    mainWindow.loadURL('file://' + __dirname + '/index.html');
+    //createWindow(false);
+    //createWindow(true,0,0);
+    createWindow(0, 0);
 
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    function createWindow(x, y) {
+        mainWindow = new BrowserWindow({
+            show: true,
+            width: 800,
+            height: 600,
+            resizable: false,
+            frame: false,
+            'always-on-top': false,
+            'web-preferences': {
+                'web-security': true,
+                'plugins': true,
+                'overlay-fullscreen-video': true
+            }
+        });
+        mainWindow.setPosition(x, y);
 
-    // Emitted when the window is closed.
-    mainWindow.on('closed', function () {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        mainWindow = null;
-    });
+        mainWindow.loadURL('http://' + host + ':' + port);
+
+        mainWindow.on('closed', function () {
+            mainWindow = null;
+        });
+    }
+});
+
+webapp.get('/', function (req, res) {
+    res.sendFile(__dirname + '/app/index.html');
+});
+
+var server = http.listen(port, function () {
+    log.info('Express server listening at http://%s:%s', host, port);
+    console.log('Express server listening at http://%s:%s', host, port);
 });
