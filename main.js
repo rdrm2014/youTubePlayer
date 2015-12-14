@@ -15,7 +15,7 @@ const BrowserWindow = electron.BrowserWindow;  // Module to create native browse
 // Report crashes to our server.
 electron.crashReporter.start();
 
-var path = require('path');
+var Tray = require('tray');
 var events = require('events');
 var fs = require('fs');
 var clipboard = require('clipboard');
@@ -43,9 +43,12 @@ app.on('window-all-closed', function () {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', function () {
+    var iconPath = src + '/images/Icon.png';
 
-    //createWindow(false);
-    //createWindow(true,0,0);
+    appTry = new Tray(iconPath);
+    appTry.setToolTip("Youtube Music Player");
+    appTry.on('click', clicked);
+
     createWindow(0, 0);
 
     function createWindow(x, y) {
@@ -69,6 +72,28 @@ app.on('ready', function () {
         mainWindow.on('closed', function () {
             mainWindow = null;
         });
+    }
+
+    function clicked() {
+        if (mainWindow && mainWindow.isVisible()) {
+            return hideWindow();
+        } else {
+            return showWindow();
+        }
+    }
+
+    function showWindow() {
+        if (!mainWindow) {
+            createWindow(0, 0)
+        } else {
+            mainWindow.show();
+            mainWindow.setPosition(0, 0);
+        }
+    }
+
+    function hideWindow() {
+        if (!mainWindow) return;
+        mainWindow.hide();
     }
 });
 
