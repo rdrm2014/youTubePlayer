@@ -31,7 +31,9 @@ require('crash-reporter').start();
 // be closed automatically when the JavaScript object is garbage collected.
 var mainWindow = null;
 
-// Quit when all windows are closed.
+/**
+ * Quit when all windows are closed.
+ */
 app.on('window-all-closed', function () {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
@@ -42,6 +44,12 @@ app.on('window-all-closed', function () {
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
+/**
+ * On ready
+ *
+ * This method will be called when Electron has finished
+ * initialization and is ready to create browser windows.
+ */
 app.on('ready', function () {
     var iconPath = src + '/images/Icon.png';
     var electronScreen = require('screen');
@@ -53,6 +61,12 @@ app.on('ready', function () {
 
     createWindow(false);
 
+    /**
+     * Create Window
+     * @param show
+     * @param x
+     * @param y
+     */
     function createWindow(show, x, y) {
         mainWindow = new BrowserWindow({
             show: show,
@@ -79,6 +93,12 @@ app.on('ready', function () {
         });
     }
 
+    /**
+     * Click on Trigger
+     * @param e
+     * @param bounds
+     * @returns {*}
+     */
     function clicked(e, bounds) {
         if (mainWindow && mainWindow.isVisible()) {
             return hideWindow();
@@ -96,6 +116,10 @@ app.on('ready', function () {
         }
     }
 
+    /**
+     * Show Window
+     * @param triggerPos
+     */
     function showWindow(triggerPos) {
         var x = Math.floor(triggerPos.x - 340 + triggerPos.width);
         var y = triggerPos.y;
@@ -108,6 +132,9 @@ app.on('ready', function () {
         }
     }
 
+    /**
+     * Hide Window
+     */
     function hideWindow() {
         if (!mainWindow) return;
         mainWindow.hide();
