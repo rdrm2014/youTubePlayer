@@ -44,17 +44,19 @@ app.on('window-all-closed', function () {
 // initialization and is ready to create browser windows.
 app.on('ready', function () {
     var iconPath = src + '/images/Icon.png';
+    var electronScreen = require('screen');
+    var cachedBounds;
 
     appTry = new Tray(iconPath);
-    appTry.setToolTip("Youtube Music Player");
+    appTry.setToolTip("youTubePlayer");
     appTry.on('click', clicked);
 
-    createWindow(0, 0);
+    createWindow(false);
 
-    function createWindow(x, y) {
+    function createWindow(show, x, y) {
         mainWindow = new BrowserWindow({
-            show: true,
-            width: 800,
+            show: show,
+            width: 340,
             height: 600,
             resizable: false,
             frame: false,
@@ -65,7 +67,10 @@ app.on('ready', function () {
                 'overlay-fullscreen-video': true
             }
         });
-        mainWindow.setPosition(x, y);
+
+        if (show) {
+            mainWindow.setPosition(x, y);
+        }
 
         mainWindow.loadURL('http://' + host + ':' + port);
 
@@ -74,20 +79,32 @@ app.on('ready', function () {
         });
     }
 
-    function clicked() {
+    function clicked(e, bounds) {
         if (mainWindow && mainWindow.isVisible()) {
             return hideWindow();
         } else {
-            return showWindow();
+            var size = electronScreen.getDisplayNearestPoint(electronScreen.getCursorScreenPoint()).workArea;
+
+            if (bounds){
+                cachedBounds = bounds;
+            } else{
+                bounds = {x: size.width + size.x - (340 / 2), y: 0};
+                cachedBounds = bounds;
+            }
+
+            return showWindow(bounds);
         }
     }
 
-    function showWindow() {
+    function showWindow(triggerPos) {
+        var x = Math.floor(triggerPos.x - 340 + triggerPos.width);
+        var y = triggerPos.y;
+
         if (!mainWindow) {
-            createWindow(0, 0)
+            createWindow(true, x, y)
         } else {
             mainWindow.show();
-            mainWindow.setPosition(0, 0);
+            mainWindow.setPosition(x, y);
         }
     }
 
