@@ -6,25 +6,13 @@
     <title>youTubePlayer</title>
     <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/stylesheets/main.css"/>
 </head>
-<body>
 <div class="content">
+<body ng-cloak id="AppCtrl" data-ng-controller="AppCtrl">
     <div id="player">
-        <iframe id="myytplayer" type="text/html" width="100%" height="250" src="https://www.youtube.com/embed/JNYOVEXJBBM?enablejsapi=1&playerapiid=ytplayer&autoplay=1" frameborder="0"></iframe>
     </div>
-
-
-    <!--<ul class="collection" id="collection">
-        <li class="collection-item avatar" data-ng-repeat="video in upcoming | filter: search"
-            ng-class="(video.id == youtube.videoId) ? 'active' : ''">
-            <img ng-src="http://img.youtube.com/vi/{{video.id}}/default.jpg" alt="" class="circle"
-                 data-ng-click="launch(video.id, video.title)">
-            <span class="title truncate" data-ng-click="launch(video.id, video.title)">{{video.title}}</span>
-            <a href="#!" class="secondary-content" data-ng-click="delete(video.id)"><i class="fa fa-trash-o"></i></a>
-        </li>
-
-
-    </ul>-->
 
 </div>
 </body>

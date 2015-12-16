@@ -24,6 +24,13 @@ var express = require('express');
 var webapp = express();
 var http = require('http').Server(webapp);
 
+var locallydb = require('locallydb');
+var db = new locallydb(src + 'db');
+
+global.collection = db.collection('links');
+global.alertIcon = src + 'images/alert.png';
+global.app = app;
+
 // Report crashes to our server.
 require('crash-reporter').start();
 
@@ -42,8 +49,6 @@ app.on('window-all-closed', function () {
     }
 });
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
 /**
  * On ready
  *
@@ -74,7 +79,7 @@ app.on('ready', function () {
             height: 600,
             resizable: false,
             frame: false,
-            'always-on-top': false,
+            'always-on-top': true,
             'web-preferences': {
                 'web-security': true,
                 'plugins': true,
@@ -111,7 +116,6 @@ app.on('ready', function () {
                 bounds = {x: size.width + size.x - (340 / 2), y: 0};
                 cachedBounds = bounds;
             }
-
             return showWindow(bounds);
         }
     }
@@ -128,6 +132,7 @@ app.on('ready', function () {
             createWindow(true, x, y)
         } else {
             mainWindow.show();
+            //mainWindow.openDevTools();
             mainWindow.setPosition(x, y);
         }
     }
@@ -141,8 +146,13 @@ app.on('ready', function () {
     }
 });
 
+webapp.use('/vendor', express.static(src + 'vendor'));
+webapp.use('/stylesheets', express.static(src + 'stylesheets'));
+webapp.use('/scripts', express.static(src + 'scripts'));
+webapp.use('/images', express.static(src + 'images'));
+
 webapp.get('/', function (req, res) {
-    res.sendFile(__dirname + '/app/index.html');
+    res.sendFile(src + 'index.html');
 });
 
 var server = http.listen(port, function () {
