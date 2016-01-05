@@ -5,7 +5,7 @@ var src = process.cwd() + '/app/';
 var config = require(src + 'config/config');
 
 var log = require(src + 'log/log')(module);
-var port = config.get('serverWebSocket:port') || 3000;
+var port = config.get('serverWebSocket:port') || 4000;
 var host = config.get('serverWebSocket:ipaddr') || '127.0.0.1';
 
 const electron = require('electron');
